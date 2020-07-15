@@ -106,19 +106,16 @@ float GetAverageVoltage()
   buf.Add(ReadSensor());
   float voltage = buf.Average() * (5.0 / 1023.0);
 
-  if (voltage > 3.3) // ie not plugged into USB for programming
+  if (voltage < data.MinVoltage)
   {
-    if (voltage < data.MinVoltage)
-    {
-      data.MinVoltage = voltage;
-      EEPROM.put(0, data);    
-    }
-  
-    if (voltage > data.MaxVoltage)
-    {
-      data.MaxVoltage = voltage;
-      EEPROM.put(0, data);    
-    }
+    data.MinVoltage = voltage;
+    EEPROM.put(0, data);    
+  }
+
+  if (voltage > data.MaxVoltage)
+  {
+    data.MaxVoltage = voltage;
+    EEPROM.put(0, data);    
   }
 
   return voltage;
